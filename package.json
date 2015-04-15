@@ -1,0 +1,27 @@
+{
+  "name": "mllp-stream",
+  "version": "1.0.0",
+  "description": "Minimal Lower Layer Protocol (MLLP) framing streams",
+  "author": "Brett Ausmeier <brett@ausmeier.co.za>",
+  "keywords": [
+    "mllp",
+    "framing",
+    "stream"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bausmeier/mllp-stream.git"
+  },
+  "main": "lib/index",
+  "scripts": {
+    "pretest": "jshint ./lib",
+    "test": "tap ./test"
+  },
+  "dependencies": {
+    "buffer-indexof": "0.0.2"
+  },
+  "devDependencies": {
+    "jshint": "^2.7.0",
+    "tap": "^0.7.1"
+  }
+}
