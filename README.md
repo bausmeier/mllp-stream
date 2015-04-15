@@ -1,5 +1,7 @@
 # Minimal Lower Layer Protocol (MLLP) framing streams
 
+[![Build Status](https://travis-ci.org/bausmeier/mllp-stream.svg?branch=master)](https://travis-ci.org/bausmeier/mllp-stream)
+
 Streams for encoding and decoding MLLP messages.
 
 ## MLLPStream([options])
