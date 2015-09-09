@@ -1,37 +1,35 @@
 'use strict';
 
-var Encoder = require('../lib').Encoder;
-var Tap = require('tap');
+const Encoder = require('../lib').Encoder;
+const Tap = require('tap');
 
-var test = Tap.test;
+const test = Tap.test;
 
-var start = new Buffer([0x0B]);
-var end = new Buffer([0x1C, 0x0D]);
+const start = new Buffer([0x0B]);
+const end = new Buffer([0x1C, 0x0D]);
 
-test('no encoding', function(t) {
+test('no encoding', (t) => {
   t.plan(1);
 
-  var message = 'test';
+  const message = 'test';
+  const encoder = new Encoder();
 
-  var encoder = new Encoder();
-
-  encoder.once('data', function(data) {
-    var expected = Buffer.concat([start, new Buffer(message), end]);
+  encoder.once('data', (data) => {
+    const expected = Buffer.concat([start, new Buffer(message), end]);
     t.deepEquals(data, expected);
   });
 
   encoder.write(message);
 });
 
-test('utf8 encoding', function(t) {
+test('utf8 encoding', (t) => {
   t.plan(1);
 
-  var message = 'test';
-  
-  var encoder = new Encoder({encoding: 'utf8'});
+  const message = 'test';
+  const encoder = new Encoder({encoding: 'utf8'});
 
-  encoder.once('data', function(data) {
-    var expected = Buffer.concat([start, new Buffer(message), end]).toString();
+  encoder.once('data', (data) => {
+    const expected = Buffer.concat([start, new Buffer(message), end]).toString('utf8');
     t.equals(data, expected);
   });
 

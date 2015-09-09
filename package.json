@@ -17,11 +17,12 @@
     "pretest": "jshint ./lib",
     "test": "tap ./test/*.js"
   },
-  "dependencies": {
-    "buffer-indexof": "0.0.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "jshint": "^2.7.0",
     "tap": "^1.4.1"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   }
 }

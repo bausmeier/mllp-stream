@@ -1,94 +1,81 @@
 'use strict';
 
-var Decoder = require('../lib').Decoder;
-var Tap = require('tap');
+const Decoder = require('../lib').Decoder;
+const Tap = require('tap');
 
-var decoder = new Decoder();
-var test = Tap.test;
+const decoder = new Decoder();
+const test = Tap.test;
 
-var end = new Buffer([0x1C, 0x0D]);
-var start = new Buffer([0x0B]);
+const end = new Buffer([0x1C, 0x0D]);
+const start = new Buffer([0x0B]);
 
-test('invalid start character', function(t) {
+test('invalid start character', (t) => {
   t.plan(1);
 
-  decoder.once('error', function(err) {
-    t.equals(err.message, 'Invalid start character');
-  });
+  decoder.once('error', (err) => t.equals(err.message, 'Invalid start character'));
   
   decoder.write(new Buffer('a'));
 });
 
-test('single chunk, single message', function(t) {
+test('single chunk, single message', (t) => {
   t.plan(1);
 
-  var expected = new Buffer('test');
+  const expected = new Buffer('test');
 
-  decoder.once('data', function(data) {
-    t.deepEquals(data, expected);
-  });
+  decoder.once('data', (data) => t.deepEquals(data, expected));
 
   decoder.write(Buffer.concat([start, expected, end]));
 });
 
-test('multiple chunks, single message', function(t) {
+test('multiple chunks, single message', (t) => {
   t.plan(1);
 
-  var first = new Buffer('first');
-  var second = new Buffer('second');
+  const first = new Buffer('first');
+  const second = new Buffer('second');
 
-  decoder.once('data', function(data) {
-    t.deepEquals(data, Buffer.concat([first, second]));
-  });
+  decoder.once('data', (data) => t.deepEquals(data, Buffer.concat([first, second])));
 
   decoder.write(Buffer.concat([start, first]));
   decoder.write(Buffer.concat([second]));
   decoder.write(Buffer.concat([end]));
 });
 
-test('single chunk, multiple messages', function(t) {
+test('single chunk, multiple messages', (t) => {
   t.plan(2);
 
-  var first = new Buffer('first');
-  var second = new Buffer('second');
+  const first = new Buffer('first');
+  const second = new Buffer('second');
 
-  decoder.once('data', function(data) {
-    t.deepEquals(data, first);
-    decoder.once('data', function(data) {
-      t.deepEquals(data, second);
-    });
+  decoder.once('data', (firstData) => {
+    t.deepEquals(firstData, first);
+    decoder.once('data', (secondData) => t.deepEquals(secondData, second));
   });
 
   decoder.write(Buffer.concat([start, first, end, start, second, end]));
 });
 
-test('multiple chunks, multiple messages', function(t) {
+test('multiple chunks, multiple messages', (t) => {
   t.plan(2);
 
-  var first = new Buffer('first');
-  var second = new Buffer('second');
+  const first = new Buffer('first');
+  const second = new Buffer('second');
 
-  decoder.once('data', function(data) {
-    t.deepEquals(data, first);
-    decoder.once('data', function(data) {
-      t.deepEquals(data, second);
-    });
+  decoder.once('data', (firstData) => {
+    t.deepEquals(firstData, first);
+    decoder.once('data', (secondData) => t.deepEquals(secondData, second));
   });
 
   decoder.write(Buffer.concat([start, first, end]));
   decoder.write(Buffer.concat([start, second, end]));
 });
 
-test('utf8 encoding', function(t) {
+test('utf8 encoding', (t) => {
   t.plan(1);
 
-  var message = 'test';
+  const message = 'test';
+  const decoder = new Decoder({encoding: 'utf8'});
 
-  var decoder = new Decoder({encoding: 'utf8'});
-
-  decoder.once('data', function(data) {
-    t.equals(data, message);
-  });
+  decoder.once('data', (data) => t.equals(data, message));
 
   decoder.write(Buffer.concat([start, new Buffer(message), end]));
 });

@@ -1,22 +1,20 @@
 'use strict';
 
-var MLLPStream = require('../lib');
-var Tap = require('tap');
+const MLLPStream = require('../lib');
+const Tap = require('tap');
 
-var test = Tap.test;
+const test = Tap.test;
 
-var stream = MLLPStream({encoding: 'utf8'});
+const stream = MLLPStream({encoding: 'utf8'});
 
 stream.encoder.pipe(stream.decoder);
 
-test('pipe', function(t) {
+test('pipe', (t) => {
   t.plan(1);
 
-  var message = 'test';
+  const message = 'test';
 
-  stream.decoder.once('data', function(data) {
-    t.equals(data, message);
-  });
+  stream.decoder.once('data', (data) => t.equals(data, message));
 
   stream.encoder.write(message);
 });
